@@ -1,5 +1,6 @@
 import Snap
 import Snap.Snaplet.Heist
+import Snap.Util.FileServe
 import Control.Lens
 
 data Memoise
@@ -16,7 +17,9 @@ indexHandler = render "index"
 memoiseInit :: SnapletInit Memoise Memoise
 memoiseInit = makeSnaplet "memoise" "The world's laziest hyperlink shortener" Nothing $ do
   h <- nestSnaplet "heist" heist $ heistInit "templates"
-  addRoutes [("", indexHandler)]
+  addRoutes [ ("static", serveDirectory "static")
+            , ("", indexHandler)
+            ]
   return $ Memoise { _heist = h
                    }
 

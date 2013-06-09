@@ -8,6 +8,7 @@ import Control.Lens
 import Data.Text
 import Data.Text.Encoding
 import Data.Monoid
+import Heist
 import Heist.Interpreted
 
 data Memoise
@@ -53,9 +54,9 @@ redirectHandler = do
         (Only url) : _ -> redirect url
         [] -> redirect "/"
 
-mainTextboxAttributeSplice :: Text -> Handler Memoise Memoise [(Text, Text)]
+mainTextboxAttributeSplice :: AttrSplice (Handler Memoise Memoise)
 mainTextboxAttributeSplice _ = do
-  mContents <- use mainTextboxContents
+  mContents <- lift $ use mainTextboxContents
   case mContents of
     Just contents -> return [("value", contents)]
     Nothing -> return []

@@ -7,6 +7,7 @@ import Control.Lens
 import Data.Text
 import Data.Text.Encoding
 import Data.Monoid
+import Heist
 import Heist.Interpreted
 
 data Memoise
@@ -41,9 +42,9 @@ indexHandler = do
       render "index"
     Nothing -> render "index"
 
-mainTextboxAttributeSplice :: Text -> Handler Memoise Memoise [(Text, Text)]
+mainTextboxAttributeSplice :: AttrSplice (Handler Memoise Memoise)
 mainTextboxAttributeSplice _ = do
-  mContents <- use mainTextboxContents
+  mContents <- lift $ use mainTextboxContents
   case mContents of
     Just contents -> return [("value", contents)]
     Nothing -> return []
